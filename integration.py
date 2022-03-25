@@ -8,26 +8,26 @@ from window_capture import WindowCapture
 import random
 from model import build_model
 import tensorflow as tf
-
-model = build_model(562, 784, 3,2)
-def action():
-    return random.choice([0,1])
+import keras
+model = keras.models.load_model('model')
+print(model.summary())
 def displayScreenshot() :
     while True:
-        screenshot = WindowCapture('Space Invader').take_screenshot()
-        print(screenshot.shape)
-        # data= tf.expand_dims(screenshot, axis =-1)
-        # screenshot.shape = (None,562,784,3)
-        model(screenshot)
-        # action = model(frame) //20fps
-        # game(action)
-        # frame = np.array(screenshot)
-        # screenshot = cv.cvtColor(frame,cv.COLOR_RGB2BGR)
+        screenshot= WindowCapture('Space Invader').take_screenshot()
         cv.imshow('Computer Vision',screenshot)
         
         if cv.waitKey(1) == ord('q') :
             cv.destroyAllWindows()
             break
+        screenshot.shape= (1,562, 784, 3)
+        res = model(screenshot)
+        action = res.numpy()[0][0]
+        print(action)
+        if(action>0.5) : 
+            print("Right")
+        else :
+            print("Left")
+        
 
 Thread(target = start_game).start()
 Thread(target = displayScreenshot).start()
