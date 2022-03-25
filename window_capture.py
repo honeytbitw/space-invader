@@ -33,14 +33,11 @@ class WindowCapture :
         dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
         cDC.SelectObject(dataBitMap)
         cDC.BitBlt((0,0),(self.w, self.h) , dcObj, (self.cropped_x,self.cropped_y), win32con.SRCCOPY)
-        # dataBitMap.SaveBitmapFile(cDC, bmpfilenamename)
         signedIntsArray = dataBitMap.GetBitmapBits(True)
         img = np.fromstring(signedIntsArray, dtype='uint8')
 
-        img.shape = (self.h,self.w,4)
+        img.shape = (1,self.h,self.w,4)
         img = img[... ,:3 ]  #Numpy slicing to get rid of alpha channel
-        # frame = np.ravel(img) #Flatten the image
-        # print(frame.shape)
 
         # Free Resources
         dcObj.DeleteDC()
