@@ -211,7 +211,7 @@ def start_game() :
                 action= 1
 
             # performing action
-            if action == 0: #going left
+            if action ==0: #going left
                 playerX_change = -5
             else: #going right
                 playerX_change = 5
